@@ -51,7 +51,7 @@ const TestChat: React.FC = () => {
         const { data: newChat, errors } = await client.conversations.chat.create({
           name: 'My conversation',
           metadata: {
-            value: '1234567890',
+            uiMetadataId: '1234567890',
           },
         });
 
