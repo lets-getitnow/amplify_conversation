@@ -1,21 +1,23 @@
-import { useEffect, useState } from "react";
-import type { Schema } from "../amplify/data/resource";
-import { generateClient } from "aws-amplify/data";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import BasicChat from "./BasicChat";
+import TestChat from "./TestChat";
 
-const client = generateClient<Schema>();
 
 function App() {
   return (
-    <main>
-      <h1>Welcome to Amplify App</h1>
-      <div>
-        🥳 App successfully hosted.
-        <br />
-        <a href="https://docs.amplify.aws/react/start/quickstart/#make-frontend-updates">
-          Review next step of this tutorial.
-        </a>
-      </div>
-    </main>
+    <Router>
+      <main>
+        <nav style={{ padding: '1rem', borderBottom: '1px solid #ccc' }}>
+          <Link to="/" style={{ marginRight: '1rem' }}>Basic Chat</Link>
+          <Link to="/test">Test Chat</Link>
+        </nav>
+        
+        <Routes>
+          <Route path="/" element={<BasicChat />} />
+          <Route path="/test" element={<TestChat />} />
+        </Routes>
+      </main>
+    </Router>
   );
 }
 
