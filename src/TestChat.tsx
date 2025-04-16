@@ -10,6 +10,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Amplify } from 'aws-amplify';
 import { generateClient } from 'aws-amplify/data';
 import './TestChat.css';
+import { Schema } from "../amplify/data/resource";
 
 // Import Amplify configuration outputs
 // @ts-ignore
@@ -33,7 +34,7 @@ const TestChat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [chat, setChat] = useState<any>(null);
+  const [chat, setChat] = useState<Schema['chat']['type']>();
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [subscription, setSubscription] = useState<any>(null);
@@ -62,7 +63,7 @@ const TestChat: React.FC = () => {
         }
 
         console.log('Chat created successfully:', newChat);
-        setChat(newChat);
+        setChat(newChat as Schema['chat']['type']);
 
         // Subscribe to assistant responses
         if (newChat) {
@@ -180,12 +181,10 @@ const TestChat: React.FC = () => {
       setInputText('');
 
       console.log('Sending message:', messageContent);
-      const { data, errors } = await chat.sendMessage(messageContent, {
-        aiContext: {
-          uiContextId: {
-            value: '123asd213123',
-          },
-        },
+      const { data, errors } = await chat.sendMessage({
+        content: [{ text: messageContent }],
+        aiContext: { uiContextId: '123asd213123', },
+        // toolConfiguration: {}
       });
 
       if (errors) {
